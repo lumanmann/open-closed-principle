@@ -10,24 +10,30 @@ import XCTest
 @testable import OCP
 
 class OCPTests: XCTestCase {
+    
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testViewControllerNormalState() {
+        let vc = ViewController()
+        _ = vc.view
+        
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+            if case ViewControllerState.normal(_) = vc.state {
+                
+            } else {
+                XCTFail()
+            }
+        }
     }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testViewControllerLoadingState() {
+        let vc = ViewController()
+        _ = vc.view
+        
+        if case ViewControllerState.loading = vc.state {
+            
+        } else {
+            XCTFail()
         }
     }
 
