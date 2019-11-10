@@ -63,6 +63,19 @@ final class ViewController: UIViewController {
         }
     }
     
+    private let apiService: APIServiceProtocol
+    
+    
+    init(apiService: APIServiceProtocol) {
+        self.apiService = apiService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -72,7 +85,7 @@ final class ViewController: UIViewController {
     
     private func loadStations() {
         state = .loading
-        APIService.getStationsList { [weak self] (error, result) in
+        apiService.getStationsList { [weak self] (error, result) in
             guard let self = self else { return }
             
             DispatchQueue.main.async {

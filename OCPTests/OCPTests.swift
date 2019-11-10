@@ -13,7 +13,7 @@ class OCPTests: XCTestCase {
     
 
     func testViewControllerNormalState() {
-        let vc = ViewController()
+        let vc = ViewController(apiService: APIService())
         _ = vc.view
         
         
@@ -27,7 +27,7 @@ class OCPTests: XCTestCase {
     }
     
     func testViewControllerLoadingState() {
-        let vc = ViewController()
+        let vc = ViewController(apiService: APIServiceMockLoading())
         _ = vc.view
         
         if case ViewControllerState.loading = vc.state {
@@ -36,5 +36,31 @@ class OCPTests: XCTestCase {
             XCTFail()
         }
     }
-
+    
+    func testViewControllerErrorState() {
+        let vc = ViewController(apiService: APIServiceMockError())
+        _ = vc.view
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+            if case ViewControllerState.error(_) = vc.state {
+                
+            } else {
+                XCTFail()
+            }
+        }
+    }
+    
+    func testViewControllerEmptyState() {
+        let vc = ViewController(apiService: APIServiceMockEmpty())
+        _ = vc.view
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+            if case ViewControllerState.empty = vc.state {
+                
+            } else {
+                XCTFail()
+            }
+        }
+    }
+    
 }

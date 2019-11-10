@@ -8,9 +8,14 @@
 
 import Foundation
 
-struct APIService {
+protocol APIServiceProtocol {
+    func getStationsList(_ completion:@escaping (Error?, UBikeResponseModel?) -> ())
+}
+
+
+struct APIService: APIServiceProtocol {
     
-    static func getStationsList(_ completion:@escaping (Error?, UBikeResponseModel?) -> ()) {
+    func getStationsList(_ completion:@escaping (Error?, UBikeResponseModel?) -> ()) {
         URLSession.shared.dataTask(
             with: URL(string: "https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json")!
         ) { (data, response, error) in
@@ -28,6 +33,28 @@ struct APIService {
             completion(nil, result)
             
             }.resume()
+    }
+}
+
+struct APIServiceMockLoading: APIServiceProtocol {
+    
+    func getStationsList(_ completion:@escaping (Error?, UBikeResponseModel?) -> ()) {
+        
+    }
+}
+
+
+struct APIServiceMockEmpty: APIServiceProtocol {
+    
+    func getStationsList(_ completion:@escaping (Error?, UBikeResponseModel?) -> ()) {
+        completion(nil, nil)
+    }
+}
+
+struct APIServiceMockError: APIServiceProtocol {
+    
+    func getStationsList(_ completion:@escaping (Error?, UBikeResponseModel?) -> ()) {
+      completion(NSError(domain: "Mock error", code: 404, userInfo: nil), nil)
     }
 }
 
